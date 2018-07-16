@@ -1,0 +1,125 @@
+const menuList = [
+    {
+        title:'Home',
+        key:'/home'
+    },
+    {
+        title:'UI',
+        key:'/ui',
+        children:[
+            {
+                title:'Buttons',
+                key:'/ui/buttons',
+            },
+            {
+                title:'Modals',
+                key:'/ui/modals',
+            },
+            {
+                title:'Loading',
+                key:'/ui/loadings',
+            },
+            {
+                title:'Notification',
+                key:'/ui/notification',
+            },
+            {
+                title:'GlobalMessage',
+                key:'/ui/messages',
+            },
+            {
+                title:'Tabs',
+                key:'/ui/tabs',
+            },
+            {
+                title:'Gallery',
+                key:'/ui/gallery',
+            },
+            {
+                title:'Carousel',
+                key:'/ui/carousel',
+            }
+        ]
+    },
+    {
+        title:'Form',
+        key:'/form',
+        children:[
+            {
+                title:'Login',
+                key:'/form/login',
+            },
+            {
+                title:'Sign Up',
+                key:'/form/reg',
+            }
+        ]
+    },
+    {
+        title:'Table',
+        key:'/table',
+        children:[
+            {
+                title:'Basic Table',
+                key:'/table/basic',
+            },
+            {
+                title:'Detail Table',
+                key:'/table/high',
+            }
+        ]
+    },
+    {
+        title:'Rich Text',
+        key:'/rich'
+    },
+    {
+        title:'City Management',
+        key:'/city'
+    },
+    {
+        title:'Order',
+        key:'/order',
+        btnList:[
+            {
+                title:'Order Detail',
+                key:'detail'
+            },
+            {
+                title:'Order Manage',
+                key:'finish'
+            }
+        ]
+    },
+    {
+        title:'User Manage',
+        key:'/user'
+    },
+    {
+        title:'Map',
+        key:'/bikeMap'
+    },
+    {
+        title:'Charts',
+        key:'/charts',
+        children:[
+            {
+                title:'Bar',
+                key:'/charts/bar'
+            },
+            {
+                title:'Pie',
+                key:'/charts/pie'
+            },
+            {
+                title:'Line',
+                key:'/charts/line'
+            },
+        ]
+    },
+    {
+        title:'Permission Management',
+        key:'/permission'
+    },
+];
+export default menuList;
