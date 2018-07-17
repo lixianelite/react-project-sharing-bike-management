@@ -9,6 +9,9 @@ export default class Main extends React.Component {
         return (
             <div>
                 this is main page.
+                <Link to="/main/a">Click me</Link>
+                <hr/>
+                {this.props.children}
             </div>
         );
     }

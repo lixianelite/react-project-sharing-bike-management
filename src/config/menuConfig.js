@@ -1,43 +1,43 @@
 const menuList = [
     {
         title:'Home',
-        key:'/home'
+        key:'/admin/home'
     },
     {
         title:'UI',
-        key:'/ui',
+        key:'/admin/ui',
         children:[
             {
                 title:'Buttons',
-                key:'/ui/buttons',
+                key:'/admin/ui/buttons',
             },
             {
                 title:'Modals',
-                key:'/ui/modals',
+                key:'/admin/ui/modals',
             },
             {
                 title:'Loading',
-                key:'/ui/loadings',
+                key:'/admin/ui/loadings',
             },
             {
                 title:'Notification',
-                key:'/ui/notification',
+                key:'/admin/ui/notification',
             },
             {
                 title:'GlobalMessage',
-                key:'/ui/messages',
+                key:'/admin/ui/messages',
             },
             {
                 title:'Tabs',
-                key:'/ui/tabs',
+                key:'/admin/ui/tabs',
             },
             {
                 title:'Gallery',
-                key:'/ui/gallery',
+                key:'/admin/ui/gallery',
             },
             {
                 title:'Carousel',
-                key:'/ui/carousel',
+                key:'/admin/ui/carousel',
             }
         ]
     },
@@ -47,35 +47,35 @@ const menuList = [
         children:[
             {
                 title:'Login',
-                key:'/form/login',
+                key:'/admin/form/login',
             },
             {
                 title:'Sign Up',
-                key:'/form/reg',
+                key:'/admin/form/reg',
             }
         ]
     },
     {
         title:'Table',
-        key:'/table',
+        key:'/admin/table',
         children:[
             {
                 title:'Basic Table',
-                key:'/table/basic',
+                key:'/admin/table/basic',
             },
             {
                 title:'Detail Table',
-                key:'/table/high',
+                key:'/admin/table/high',
             }
         ]
     },
     {
         title:'Rich Text',
-        key:'/rich'
+        key:'/admin/rich'
     },
     {
         title:'City Management',
-        key:'/city'
+        key:'/admin/city'
     },
     {
         title:'Order',
@@ -93,33 +93,33 @@ const menuList = [
     },
     {
         title:'User Manage',
-        key:'/user'
+        key:'/admin/user'
     },
     {
         title:'Map',
-        key:'/bikeMap'
+        key:'/admin/bikeMap'
     },
     {
         title:'Charts',
-        key:'/charts',
+        key:'/admin/charts',
         children:[
             {
                 title:'Bar',
-                key:'/charts/bar'
+                key:'/admin/charts/bar'
             },
             {
                 title:'Pie',
-                key:'/charts/pie'
+                key:'/admin/charts/pie'
             },
             {
                 title:'Line',
-                key:'/charts/line'
+                key:'/admin/charts/line'
             },
         ]
     },
     {
         title:'Permission Management',
-        key:'/permission'
+        key:'admin//permission'
     },
 ];
 export default menuList;

@@ -13,7 +13,7 @@ export default class Header extends React.Component {
         setInterval(() => {
             let sysTime = Util.formateDate(new Date().getTime());
             this.setState({
-                sysTime
+                sysTime: sysTime
             })
         }, 1000)
         this.getWeatherAPIData();
