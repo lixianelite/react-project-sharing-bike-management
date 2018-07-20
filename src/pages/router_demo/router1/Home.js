@@ -1,6 +1,5 @@
-import React from '../../../../../../../../Library/Caches/typescript/2.9/node_modules/@types/react';
-
-import {HashRouter, Route, Link, Switch} from '../../../../../../../../Library/Caches/typescript/2.9/node_modules/@types/react-router-dom';
+import React from 'react';
+import {HashRouter, Route, Link, Switch} from 'react-router-dom';
 
 import Main from './Main';
 import About from './about';
