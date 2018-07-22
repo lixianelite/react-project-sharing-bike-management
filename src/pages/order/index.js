@@ -8,7 +8,10 @@ const Option = Select.Option;
 
 export default class Order extends React.Component {
 
-    state = {}
+    state = {
+        orderInfo: {},
+        orderConfirmVisble: false
+    }
 
     params = {
         page:1
@@ -35,10 +38,70 @@ export default class Order extends React.Component {
             this.setState({
                 list,
                 pagination: Utils.pagination(res, (current) => {
-                    _this.params
+                    _this.params.page = current;
+                    _this.requestList();
                 })
             })
         })
+    }
+
+    handleConfirm = ()=>{
+        let item = this.state.seleckedItem;
+        if(!item) {
+            return;
+        }
+        axios.ajax({
+            url:'/order/ebike_info',
+            data:{
+                params: {
+                    OrderId: item.id
+                }
+            }
+        }).then((res)=>{
+            if(res.code === 0 ){
+                this.setState({
+                    orderInfo:res.result,
+                    orderConfirmVisble: true
+                })
+            }
+        })
+    }
+
+    handleFinishOrder = () => {
+       let item = this.state.seleckedItem;
+        axios.ajax({
+            url:'/order/finish_order',
+            data:{
+                params:{
+                    orderId: item.id
+                }
+            }
+        }).then((res)=>{
+            if(res.code === 0 ){
+                message.success('Order Complete!');
+                this.setState({
+                    orderInfo:res.result,
+                    orderConfirmVisble: false
+                })
+                this.requestList();
+            }
+        })
+    }
+
+    onRowClick = (record, index) => {
+        let selectKey = [index];
+        this.setState({
+            selectedRowKeys: selectKey,
+            seleckedItem: record
+        })
+    }
+
+    openOrderDetail = () => {
+        let item = this.state.seleckedItem;
+        if(!item) {
+            return;
+        }
+        window.open(`/#/common/order/detail/${item.id}`, '_blank');
     }
 
 
@@ -92,14 +155,27 @@ export default class Order extends React.Component {
                 dataIndex: 'user_pay'
             }
         ]
+        
+        const formItemLayout = {
+            labelCol: {span: 5},
+            wrapperCol: {span:25}
+        }
+
+        const selectedRowKeys = this.state.selectedRowKeys;
+
+        const rowSelection = {
+            type: 'radio',
+            selectedRowKeys: selectedRowKeys
+        }
+
         return (
             <div>
                 <Card>
                     <FilterForm />
                 </Card>
                 <Card style={{marginTop:10}}>
-                    <Button>Order Detail</Button>
-                    <Button>Complete Order</Button>
+                    <Button type="primary" onClick={this.openOrderDetail}>Order Detail</Button>
+                    <Button type="primary" onClick= {this.handleConfirm}>Complete Order</Button>
                 </Card>
                 <div className="content-wrap">
                 <Table
@@ -107,8 +183,42 @@ export default class Order extends React.Component {
                     columns={columns}
                     dataSource={this.state.list}
                     pagination={this.state.pagination}
+                    rowSelection={rowSelection}
+                    onRow={(record, index) => {
+                        return {
+                            onClick: () => {
+                                this.onRowClick(record, index);
+                            }
+                        }
+                    }}
                     />
                 </div>
+                <Modal
+                    title="Complete Order"
+                    visible={this.state.orderConfirmVisble}
+                    onCancel={()=>{
+                        this.setState({
+                            orderConfirmVisble:false
+                        })
+                    }}
+                    onOk={this.handleFinishOrder}
+                    width={600}
+                >
+                    <Form layout="horizontal">
+                        <FormItem label="Bike SN" {...formItemLayout}>
+                            {this.state.orderInfo.bike_sn}
+                        </FormItem>
+                        <FormItem label="Battery" {...formItemLayout}>
+                            {this.state.orderInfo.battery + '%'}
+                        </FormItem>
+                        <FormItem label="Start Time" {...formItemLayout}>
+                            {this.state.orderInfo.start_time}
+                        </FormItem>
+                        <FormItem label="Location" {...formItemLayout}>
+                            {this.state.orderInfo.location}
+                        </FormItem>
+                    </Form>
+                </Modal>
             </div>
         )
     }
@@ -141,6 +251,8 @@ class FilterForm extends React.Component{
                             <DatePicker showtime format="YYYY-MM-D HH:mm:ss" />
                         )
                     }
+                </FormItem>
+                <FormItem label="Order Time">
                     {
                         getFieldDecorator('end_time') (
                             <DatePicker style={{marginLeft: 5}} showtime format="YYYY-MM-D HH:mm:ss" />
