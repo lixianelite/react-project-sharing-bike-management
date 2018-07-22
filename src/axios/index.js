@@ -26,7 +26,7 @@ export default class Axios {
             loading.style.display = 'block';
         }
 
-        let baseUrl = 'https://www.easy-mock.com/mock/5b511c9746f21b6e9a951880/mockApi';
+        let baseUrl = 'http://0.0.0.0:7300/mock/5b537146f27be30e5e5cc155/mockApi';
 
         return new Promise((resolve, reject) => {
             axios({

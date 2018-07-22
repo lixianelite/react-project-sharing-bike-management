@@ -1,12 +1,18 @@
 import React from 'react';
-import {Card, Table, Modal} from 'antd';
+import {Card, Table, Modal, Button, message} from 'antd';
 import axios from './../../axios/index';
+import utils from '../../utils/utils';
 
 export default class BasicTable extends React.Component {
 
     state = {
         dataSource2: []
     }
+
+    params = {
+        page: 1
+    }
+
 
     componentDidMount() {
         const dataSource = [
@@ -52,18 +58,26 @@ export default class BasicTable extends React.Component {
     }
 
     request = () => {
+        let _this = this;
         axios.ajax({
             url: 'table/list',
             data: {
                 params: {
-                    page:1
+                    page:this.params.page
                 },
             isShowLoading: true
             }
         }).then((res) => {
             if(res.code === 0) {
                 this.setState({
-                    dataSource2: res.result
+                    dataSource2: res.result.list,
+                    selectedRowKeys: [],
+                    selectedRows:null,
+                    pagination: utils.pagination(res, (current)=>{
+                        _this.params.page = current;
+                        this.request();
+                    })
+
                 })
             }
         })
@@ -78,6 +92,23 @@ export default class BasicTable extends React.Component {
         this.setState({
             selectedRowKeys: selectKey,
             seleckedItem: record
+        })
+    }
+
+    handleDelete = () => {
+        let rows = this.state.selectedRows;
+        let ids = [];
+        rows.map((item) => 
+            ids.push(item.id)
+        )
+
+        Modal.confirm({
+            title: 'Warning',
+            content: 'Are you sure?',
+            onOk: () => {
+                message.success(`Delete success! ${ids.join(',')}`);
+                this.request();
+            }
         })
     }
 
@@ -135,7 +166,7 @@ export default class BasicTable extends React.Component {
             },
             {
                 title: 'Birthday',
-                dataIndex: 'birth date'
+                dataIndex: 'birthdate'
             },
             {
                 title: 'Address',
@@ -146,6 +177,17 @@ export default class BasicTable extends React.Component {
         const rowSelection = {
             type: 'radio',
             selectedRowKeys
+        }
+
+        const rowCheckSelection = {
+            type: 'checkBox',
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({
+                    selectedRowKeys,
+                    selectedRows
+                })
+            }
         }
 
 
@@ -186,6 +228,34 @@ export default class BasicTable extends React.Component {
                         columns={columns}
                         dataSource={this.state.dataSource2}
                         pagination={false}
+                    />
+
+                </Card>
+
+                <Card title="Mock - Multi-Select" style={{margin:'10px 0px'}}>
+                    <div style={{marginBottom: 10}}>
+                        <Button onClick={this.handleDelete}>Delete</Button>
+                    </div>
+                    <Table
+                        bordered
+                        rowSelection = {rowCheckSelection}
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={false}
+                    />
+
+                </Card>
+
+
+                <Card title="Mock - Pagination" style={{margin:'10px 0px'}}>
+                    <div style={{marginBottom: 10}}>
+                        <Button onClick={this.handleDelete}>Delete</Button>
+                    </div>
+                    <Table
+                        bordered
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={this.state.pagination}
                     />
 
                 </Card>

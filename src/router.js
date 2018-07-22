@@ -15,6 +15,10 @@ import Carousel from './pages/ui/carousel';
 import FormLogin from './pages/form/login';
 import Register from './pages/form/register';
 import BasicTable from './pages/table/basicTable';
+import AdvancedTable from './pages/table/advancedTable';
+import City from './pages/city/index';
+import Order from './pages/order/index';
+
 
 
 export default class IRouter extends React.Component{
@@ -40,6 +44,9 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/form/login" component={FormLogin}/>
                                 <Route path="/admin/form/reg" component={Register}/>
                                 <Route path="/admin/table/basic" component={BasicTable}/>
+                                <Route path="/admin/table/high" component={AdvancedTable}/>
+                                <Route path="/admin/city" component={City}/>
+                                <Route path="/admin/order" component={Order}/>
                                 <Route component={NoMatch}/>
                             </Switch>
                         </Admin>
