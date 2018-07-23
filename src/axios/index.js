@@ -1,5 +1,6 @@
 import JsonP from 'jsonp';
 import axios from 'axios';
+import Utils from './../utils/utils';
 
 
 export default class Axios {
@@ -54,6 +55,31 @@ export default class Axios {
                     reject(response.data);
                 }
             })
+        })
+    }
+
+    static requestList(_this, url, params) {
+        var data = {
+            params: params
+        }
+
+        this.ajax({
+            url: url,
+            data: data
+        }).then((data) => {
+            if(data && data.result) {
+                let list = data.result.item_list.map((item, index) => {
+                    item.key = index;
+                    return item;
+                });
+                _this.setState({
+                    list,
+                    pagination: Utils.pagination(data, (current) => {
+                        _this.params.page = current;
+                        _this.requestList();
+                    })
+                })
+            }
         })
     }
 }

@@ -3,8 +3,9 @@ import {Card, Button, Table, Form, Select, Modal, message, DatePicker} from 'ant
 import axios from './../../axios/index';
 import Utils from './../../utils/utils';
 import '../../style/common.less';
+import BaseForm from '../../components/BaseForm';
+import Etable from '../../components/Etable';
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 export default class Order extends React.Component {
 
@@ -17,36 +18,41 @@ export default class Order extends React.Component {
         page:1
     }
 
+    formList = [
+        {
+            type:'SELECT',
+            label: 'City',
+            field: 'city',
+            placeholder: 'All',
+            initialValue: '1',
+            width: 100,
+            list: [{id: '0', name: 'All'}, {id: '1', name: 'Atlanta'}, {id: '2', name: 'Seatle'},{id: '3', name: 'Chicago'},{id: '4', name: 'Los Angelas'}]
+        },
+        {
+            type:'DATESELECT'
+        },
+        {
+            type:'SELECT',
+            label: 'Order Status',
+            field: 'order_status',
+            placeholder: 'All',
+            initialValue: '1',
+            width: 80,
+            list: [{id: '0', name: 'All'},{id: '1', name: 'In use'}, {id: '2', name: 'Break'}, {id: '3', name: 'Complete'}]
+        }
+    ]
+
     componentDidMount() {
         this.requestList()
     }
 
     requestList = () => {
         let _this = this;
-        axios.ajax({
-            url: "/order/list",
-            data: {
-                params: {
-                    page: this.params.page
-                }
-            }
-        }).then((res) => {
-            let list = res.result.item_list.map((item, index) => {
-                item.key = index;
-                return item;
-            });
-            this.setState({
-                list,
-                pagination: Utils.pagination(res, (current) => {
-                    _this.params.page = current;
-                    _this.requestList();
-                })
-            })
-        })
+        axios.requestList(_this, "/order/list", this.params);
     }
 
     handleConfirm = ()=>{
-        let item = this.state.seleckedItem;
+        let item = this.state.selectedItem;
         if(!item) {
             return;
         }
@@ -68,7 +74,7 @@ export default class Order extends React.Component {
     }
 
     handleFinishOrder = () => {
-       let item = this.state.seleckedItem;
+       let item = this.state.selectedItem;
         axios.ajax({
             url:'/order/finish_order',
             data:{
@@ -88,24 +94,19 @@ export default class Order extends React.Component {
         })
     }
 
-    onRowClick = (record, index) => {
-        let selectKey = [index];
-        this.setState({
-            selectedRowKeys: selectKey,
-            seleckedItem: record
-        })
-    }
-
     openOrderDetail = () => {
-        let item = this.state.seleckedItem;
+        let item = this.state.selectedItem;
         if(!item) {
             return;
         }
-        window.open(`/#/common/order/detail/${item.id}`, '_blank');
+        window.open(`/#/common/order/detail/${item[0].id}`, '_blank');
     }
 
+    handleFilter = (params) => {
+        this.prarams = params;
+        this.requestList();
+    }
 
-    
     render() {
         const columns = [
             {
@@ -171,26 +172,21 @@ export default class Order extends React.Component {
         return (
             <div>
                 <Card>
-                    <FilterForm />
+                    <BaseForm formList={this.formList} filterSubmit={this.handleFilter}/>
                 </Card>
                 <Card style={{marginTop:10}}>
-                    <Button type="primary" onClick={this.openOrderDetail}>Order Detail</Button>
+                    <Button type="primary" onClick={this.openOrderDetail.bind(this)}>Order Detail</Button>
                     <Button type="primary" onClick= {this.handleConfirm}>Complete Order</Button>
                 </Card>
                 <div className="content-wrap">
-                <Table
-                    bordered
-                    columns={columns}
-                    dataSource={this.state.list}
-                    pagination={this.state.pagination}
-                    rowSelection={rowSelection}
-                    onRow={(record, index) => {
-                        return {
-                            onClick: () => {
-                                this.onRowClick(record, index);
-                            }
-                        }
-                    }}
+                    <Etable
+                        updateSelectedItem = {Utils.updateSelectedItem.bind(this)}
+                        selectedRowKeys = {this.state.selectedRowKeys}
+                        bordered
+                        columns={columns}
+                        dataSource={this.state.list}
+                        pagination={this.state.pagination}
+                        rowSelection={rowSelection}
                     />
                 </div>
                 <Modal
@@ -223,62 +219,3 @@ export default class Order extends React.Component {
         )
     }
 }
-
-class FilterForm extends React.Component{
-
-    render() {
-        const { getFieldDecorator } = this.props.form;
-
-        return (
-            <Form layout="inline">
-                <FormItem label="City">
-                    {
-                        getFieldDecorator('city_id') (
-                            <Select placeholder="All" style={{width:110}}>
-                                <Option value="">All</Option>
-                                <Option value="2">Chicago</Option>
-                                <Option value="3">Seattle</Option>
-                                <Option value="4">New York</Option>
-                                <Option value="5">Los Angelas</Option>
-                                <Option value="6">San Fransico</Option>
-                            </Select>
-                        )
-                    }
-                </FormItem>
-                <FormItem label="Order Time">
-                    {
-                        getFieldDecorator('start_time') (
-                            <DatePicker showtime format="YYYY-MM-D HH:mm:ss" />
-                        )
-                    }
-                </FormItem>
-                <FormItem label="Order Time">
-                    {
-                        getFieldDecorator('end_time') (
-                            <DatePicker style={{marginLeft: 5}} showtime format="YYYY-MM-D HH:mm:ss" />
-                        )
-                    }
-                </FormItem>
-
-                <FormItem label="Order Status">
-                    {
-                        getFieldDecorator('order_status') (
-                            <Select placeholder="All" style={{width:100}}>
-                                <Option value="">All</Option>
-                                <Option value="1">In use</Option>
-                                <Option value="2">Break</Option>
-                                <Option value="3">Complete</Option>
-                            </Select>
-                        )
-                    }
-                </FormItem>
-
-                <FormItem>
-                    <Button type="primary" style={{margin:'0 20px'}}>Search</Button>
-                    <Button>Reset</Button>
-                </FormItem>
-            </Form>
-        );
-    }
-};
-FilterForm = Form.create({})(FilterForm);
