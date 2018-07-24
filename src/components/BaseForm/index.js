@@ -24,7 +24,7 @@ class BaseForm extends React.Component{
                 let label = item.label;
                 let field = item.field;
                 let initialValue = item.initialValue || '';
-                let placeHolder = item.placeHolder;
+                let placeHolder = item.placeholder;
                 let width = item.width;
                 if(item.type === 'DATESELECT') {
                     const begin_time = 
@@ -49,15 +49,31 @@ class BaseForm extends React.Component{
                     const INPUT = 
                     <FormItem label={label} key={field}>
                         {
-                            getFieldDecorator([field], {
-                                initialValue: initialValue
+                            getFieldDecorator([field])(
+                                <Input placeholder={placeHolder} type="text"/>
+                            )
+                        }
+                    </FormItem>;
+                    formItemList.push(INPUT);
+                } else if(item.type === 'CITY') {
+                    const CITY = 
+                    <FormItem label={label} key="city">
+                        {
+                            getFieldDecorator("city", {
+                                initialValue: '1'
                             }) (
-                                <Input type="text" placeholder={placeHolder} />
+                                <Select 
+                                    placeholder={placeHolder} 
+                                    style={{width: 100}}
+                                > 
+                                {Utils.getOptionList([{id: "0", name: 'All'},{id: "1", name: 'Atlanta'},{id: "2", name: 'Seattle'},{id: "3", name: 'Los Angelas'},{id: "4", name: 'New York'}])}
+                                </Select>
                             )
                         }
                     </FormItem>
-                    formItemList.push(INPUT);
-                } else if (item.type === 'SELECT') {
+                    formItemList.push(CITY);
+                }
+                 else if (item.type === 'SELECT') {
                     const SELECT = 
                     <FormItem label={label} key={field}>
                         {
@@ -67,7 +83,7 @@ class BaseForm extends React.Component{
                                 <Select 
                                     placeholder={placeHolder} 
                                     style={{width: width}}
-                                >
+                                > 
                                 {Utils.getOptionList(item.list)}
                                    
                                 </Select>
@@ -90,6 +106,15 @@ class BaseForm extends React.Component{
                         }
                     </FormItem>
                     formItemList.push(CHECKBOX);
+                } else if (item.type === 'DATEPICKER') {
+                    const date = <FormItem label={label} key={field}>
+                        {
+                            getFieldDecorator([field]) (
+                                <DatePicker key={field} showTime={true} format="YYYY-MM-DD HH:mm:ss"/>
+                            )
+                        }
+                    </FormItem>
+                    formItemList.push(date);
                 }
             })
         }

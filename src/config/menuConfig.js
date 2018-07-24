@@ -79,7 +79,7 @@ const menuList = [
     },
     {
         title:'Order',
-        key:'order',
+        key:'/admin/order',
         btnList:[
             {
                 title:'Order Detail',

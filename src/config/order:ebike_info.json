@@ -1,0 +1,10 @@
+{
+  "code": 0,
+  "result": {
+    "id": 27296,
+    "bike_sn": "8001161116",
+    "battery": 100,
+    "start_time": "@datetime",
+    "location": "6640 Akers Mill Rd SE"
+  }
+}

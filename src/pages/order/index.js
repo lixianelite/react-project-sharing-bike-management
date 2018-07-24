@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Button, Table, Form, Select, Modal, message, DatePicker} from 'antd';
+import {Card, Button, Form, Modal, message} from 'antd';
 import axios from './../../axios/index';
 import Utils from './../../utils/utils';
 import '../../style/common.less';
