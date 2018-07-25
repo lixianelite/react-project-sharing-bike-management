@@ -75,8 +75,8 @@ export default class BikeMap extends React.Component{
           var serviceArea = new window.google.maps.Polygon({
             paths: area,
             strokeColor: '#CE0000',
-            strokeOpacity: 1,
-            strokeWeight: 4,
+            strokeOpacity: 0.5,
+            strokeWeight: 1,
             fillColor: '#ff8605',
             fillOpacity: 0.35
           });
