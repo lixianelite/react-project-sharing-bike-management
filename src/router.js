@@ -1,8 +1,9 @@
 import React from 'react';
-import { HashRouter, Route, Switch} from 'react-router-dom';
+import { HashRouter, Route, Switch, Redirect} from 'react-router-dom';
 import App from './App';
 import Login from './pages/login';
 import Admin from './admin';
+import Home from './pages/home';
 import Buttons from './pages/ui/buttons';
 import NoMatch from './pages/nomatch';
 import Modals from './pages/ui/modals';
@@ -26,6 +27,7 @@ import Bar from './pages/echarts/bar';
 import Pie from './pages/echarts/pie';
 import Line from './pages/echarts/line';
 import RichText from './pages/rich';
+import Permission from './pages/permission';
 
 export default class IRouter extends React.Component{
 
@@ -39,6 +41,7 @@ export default class IRouter extends React.Component{
                     <Route path="/admin" render = { () => 
                         <Admin>
                             <Switch>
+                                <Route path="/admin/home" component={Home} />
                                 <Route path="/admin/ui/buttons" component={Buttons}/>
                                 <Route path="/admin/ui/modals" component={Modals}/>
                                 <Route path="/admin/ui/loadings" component={Loadings}/>
@@ -59,6 +62,8 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/charts/pie" component={Pie}/>
                                 <Route path="/admin/charts/line" component={Line}/>
                                 <Route path="/admin/rich" component={RichText}/>
+                                <Route path="/admin/permission" component={Permission}/>
+                                <Redirect to="/admin/home"/>
                                 <Route component={NoMatch}/>
                             </Switch>
                         </Admin>
